@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">الأسهم هوك</string>
+    <string name="content_test">بحث عن الأوراق المالية رمز</string>
+    <string name="high">عالي</string>
+    <string name="low">منخفض</string>
+    <string name="mkt_cap">القيمة السوقية</string>
+    <string name="network_toast">اه اوه! هذا التطبيق يتطلب اتصالبالإنترنت</string>
+    <string name="no_stocks_added">وأضافت يوجد مخزون</string>
+    <string name="open">فتح</string>
+    <string name="refresh_widget">القطعة على تحديث</string>
+    <string name="avg_vol">متوسط ​​حجم</string>
+    <string name="action_change_units">وحدات التغيير</string>
+    <string name="action_settings">إعدادات</string>
+    <string name="statistics_for_3_months_before_today">إحصاءات لمدة 3 أشهر قبل اليوم</string>
+    <string name="statistics_for_5_days_before_today">إحصاءات عن 5 أيام قبل اليوم</string>
+    <string name="statistics_for_6_months_before_today">إحصاءات لمدة 6 أشهر قبل اليوم</string>
+    <string name="statistics_for_a_month_before_today">إحصاءات لمدة شهر قبل اليوم</string>
+    <string name="statistics_for_a_year_before_today">إحصاءات لمدة عام قبل اليوم</string>
+    <string name="graph_unavailable">الرسم البياني غير متوفر في الوقت المحدد .. حاول مرة أخرى في وقت لاحق </string>
+    <string name="search_failed">فشلت الأسهم البحث </string>
+    <string name="begin_str">تبدأ من خلال النقر على علامة + لإضافة أسهم جديدة</string>
+    <string name="no_net">لا يوجد اتصال بالانترنت</string>
+    <string name="res_saved">يتم حفظ هذه الأسهم بالفعل</string>
+    <string name="server_not_found">الخادم الأسهم لم يتم العثور على</string>
+    <string name="invalid_data">بيانات غير صالحة</string>
+    <string name="widget_no_net">لا يوجد إنترنت .. المزامنة مع قاعدة البيانات حاليا ..</string>
+    <string name="str_M">مليون</string>
+    <string name="str_B">مليار</string>
+    <string name="str_updating">تحديث …</string>
+    <string name="refresh">اعادة تنشيط</string>
+</resources>

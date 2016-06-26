@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             xmlns:wheel="http://schemas.android.com/apk/res-auto"
+             android:background="#414142">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginTop="45dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tableData"
+            android:layout_weight="0.68">
+
+            <TableRow android:layout_marginTop="10dp" android:weightSum="1">
+
+                <TextView
+                    style="@style/StockDetailsTextStyle"
+                    android:text="@string/open"
+                    android:id="@+id/textView"
+                    android:layout_weight="0.5"/>
+
+                <TextView
+                    style="@style/StockDetailsContentTextStyle"
+                    android:text="@string/str_detail_empty"
+                    android:layout_weight="0.5"
+                    android:id="@+id/textOpen"/>
+            </TableRow>
+
+            <TableRow android:layout_marginTop="5dp" android:weightSum="1">
+
+                <TextView
+                    android:text="@string/high"
+                    style="@style/StockDetailsTextStyle"
+                    android:layout_weight="0.5"
+                    android:id="@+id/textView5"/>
+
+                <TextView
+                    android:text="@string/str_detail_empty"
+                    style="@style/StockDetailsContentTextStyle"
+                    android:layout_weight="0.5"
+                    android:id="@+id/textHigh"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_marginTop="5dp"
+                android:weightSum="1">
+
+                <TextView
+                    android:text="@string/low"
+                    style="@style/StockDetailsTextStyle"
+                    android:layout_weight="0.5"
+                    android:id="@+id/textView9"/>
+
+                <TextView
+                    android:text="@string/str_detail_empty"
+                    android:layout_weight="0.5"
+                    style="@style/StockDetailsContentTextStyle"
+                    android:id="@+id/textLow"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_marginTop="5dp"
+                android:weightSum="1">
+
+                <TextView
+                    android:text="@string/avg_vol"
+                    android:layout_weight="0.5"
+                    style="@style/StockDetailsTextStyle"
+                    android:id="@+id/textView11"/>
+
+                <TextView
+                    android:text="@string/str_detail_empty"
+                    android:layout_weight="0.5"
+                    style="@style/StockDetailsContentTextStyle"
+                    android:id="@+id/textAvgVol"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_marginTop="5dp"
+                android:weightSum="1">
+
+                <TextView
+                    style="@style/StockDetailsTextStyle"
+                    android:text="@string/mkt_cap"
+                    android:layout_weight="0.5"
+                    android:id="@+id/textView2"/>
+
+                <TextView
+                    style="@style/StockDetailsContentTextStyle"
+                    android:layout_weight="0.5"
+                    android:id="@+id/textMktCap"
+                    android:text="@string/str_detail_empty"/>
+            </TableRow>
+
+        </TableLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.32">
+
+            <com.pnikosis.materialishprogress.ProgressWheel
+                android:id="@+id/progress_wheel"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_centerInParent="true"
+                wheel:matProg_barColor="#5588FF"
+                wheel:matProg_progressIndeterminate="true"/>
+
+            <com.db.chart.view.LineChartView
+                android:id="@+id/linechart"
+                android:layout_width="match_parent"
+                android:minHeight="250dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="50dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentBottom="true"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="5dp"
+                android:id="@+id/modes"
+                android:weightSum="1">
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_5d"
+                    android:contentDescription="@string/statistics_for_5_days_before_today"
+                    android:layout_weight="0.20"
+                    android:id="@+id/btn_5D"/>
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_1m"
+                    android:contentDescription="@string/statistics_for_a_month_before_today"
+                    android:layout_weight="0.20"
+                    android:id="@+id/btn_1M"/>
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_3m"
+                    android:contentDescription="@string/statistics_for_3_months_before_today"
+                    android:layout_weight="0.20"
+                    android:id="@+id/btn_3M"/>
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_6m"
+                    android:contentDescription="@string/statistics_for_6_months_before_today"
+                    android:layout_weight="0.20"
+                    android:id="@+id/btn_6M"/>
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_1y"
+                    android:contentDescription="@string/statistics_for_a_year_before_today"
+                    android:layout_weight="0.20"
+                    android:id="@+id/btn_1Y"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="35sp"
+        android:text="@string/str_detail_empty"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/textBid"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/str_detail_empty"
+        android:id="@+id/textChange"
+        android:layout_toRightOf="@+id/textBid"
+        android:layout_toEndOf="@+id/textBid"
+        android:layout_marginTop="22dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"/>
+</RelativeLayout>

@@ -1,0 +1,41 @@
+<resources>
+
+  <!-- Base application theme. -->
+  <style name="AppTheme"
+      parent="Theme.AppCompat">
+      <item name="colorPrimary">@color/material_black_500</item>
+      <item name="colorPrimaryDark">@color/material_black_700</item>
+    <!-- Customize your theme here. -->
+  </style>
+
+  <style name="PercentChangeTextStyle">
+    <item name="android:textSize">20sp</item>
+    <item name="android:textColor">#FFF</item>
+    <item name="android:textStyle">bold</item>
+  </style>
+  <style name="BidPriceTextStyle">
+    <item name="android:textSize">20sp</item>
+  </style>
+  <style name="StockSymbolTextStyle">
+    <item name="android:textSize">25sp</item>
+    <item name="android:textAllCaps">true</item>
+  </style>
+
+    <style name="StockSymbolWidgetStyle">
+
+    </style>
+    <style name="StockDetailsTextStyle">
+        <item name="android:textColor">#9A9A9A</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_weight">0.5</item>
+    </style>
+
+    <style name="StockDetailsContentTextStyle">
+        <item name="android:textColor">#CAC9C9</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_weight">0.5</item>
+    </style>
+
+</resources>

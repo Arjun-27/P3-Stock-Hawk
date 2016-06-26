@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="material_black_700">#2A2A2A</color>
+  <color name="fade">#66FFFFFF</color>
+  <color name="material_black_500">#2F2F2C</color>
+  <color name="material_red_700">#D50000</color>
+  <color name="material_green_700">#00C853</color>
+</resources>

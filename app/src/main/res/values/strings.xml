@@ -1,0 +1,44 @@
+<resources>
+  <string name="app_name">Stock Hawk</string>
+
+  <string name="action_example" translatable="false">Example action</string>
+
+  <string name="action_settings">Settings</string>
+  <string name="action_change_units">Change Units</string>
+  <string name="symbol_search" translatable="false">Symbol Search</string>
+  <string name="content_test">Search for a Stock Symbol</string>
+  <string name="input_hint" translatable="false">FB</string>
+  <string name="input_prefill" translatable="false"></string>
+  <string name="network_toast">Uh-oh! This app requires an internet connection</string>
+    <string name="str_detail_empty" translatable="false">------</string>
+    <string name="_5d" translatable="false">5D</string>
+    <string name="_1m" translatable="false">1M</string>
+    <string name="_3m" translatable="false">3M</string>
+    <string name="_6m" translatable="false">6M</string>
+    <string name="_1y" translatable="false">1Y</string>
+    <string name="mkt_cap">Mkt Cap</string>
+    <string name="avg_vol">Avg Vol</string>
+    <string name="low">Low</string>
+    <string name="high">High</string>
+    <string name="open">Open</string>
+    <string name="statistics_for_a_year_before_today">Statistics for a year before today</string>
+    <string name="statistics_for_6_months_before_today">Statistics for 6 months before today</string>
+    <string name="statistics_for_3_months_before_today">Statistics for 3 months before today</string>
+    <string name="statistics_for_a_month_before_today">Statistics for a month before today</string>
+    <string name="statistics_for_5_days_before_today">Statistics for 5 days before today</string>
+    <string name="refresh_widget">Refresh widget</string>
+    <string name="no_stocks_added">No stocks added...</string>
+    <string name="graph_unavailable">Graph not available for the selected time.. Try again later</string>
+    <string name="search_failed">Stock search failed...</string>
+    <string name="begin_str">Begin by tapping on + to add new stocks</string>
+    <string name="no_net">No internet connection</string>
+    <string name="res_saved">This stock is already saved!</string>
+    <string name="server_not_found">Stock server not found</string>
+    <string name="invalid_data">Invalid data</string>
+    <string name="widget_no_net">No Internet.. Syncing with offline database..</string>
+    <string name="str_M">M</string>
+    <string name="str_B">B</string>
+    <string name="str_format" formatted="false">%.2f</string>
+    <string name="str_updating">Updating...</string>
+    <string name="refresh">Refresh</string>
+</resources>
