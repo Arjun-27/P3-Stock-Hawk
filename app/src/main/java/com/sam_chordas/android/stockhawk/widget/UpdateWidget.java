@@ -26,7 +26,7 @@ public class UpdateWidget {
         String date = getFormattedNo(cal.get(Calendar.DATE)) + "/" + getFormattedNo(cal.get(Calendar.MONTH)) + " " + getFormattedNo(cal.get(Calendar.HOUR_OF_DAY)) + ":" + (cal.get(Calendar.MINUTE) < 10 ? getFormattedNo(0) + getFormattedNo(cal.get(Calendar.MINUTE)) : getFormattedNo(cal.get(Calendar.MINUTE)));
         views.setTextViewText(R.id.textWidDate, date);
         appWidgetManager.updateAppWidget(appWidgetIds, views);
-        Log.d("Updating", "Updated at " + date);
+        Log.d("Updating", "Updated at -> " + date);
     }
 
     private static String getFormattedNo(int no) {

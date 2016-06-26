@@ -69,6 +69,10 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     private IntentFilter filter;
     private SwipeRefreshLayout refreshLayout;
     private TextView textEmpty;
+    private int pos = 0;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager manager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,21 +102,11 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
         textEmpty.setVisibility(View.INVISIBLE);
         // The intent service is for executing immediate pulls from the Yahoo API
         // GCMTaskService can only schedule tasks, they cannot execute immediately
-        mServiceIntent = new Intent(this, StockIntentService.class);
-        if (savedInstanceState == null) {
-            // Run the initialize task service so that some stocks appear upon an empty database
-            mServiceIntent.putExtra("tag", "init");
-            if (Utils.isNetworkAvailable(MyStocksActivity.this)) {
-                startService(mServiceIntent);
-            } else {
-                networkToast();
-            }
-        }
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        final LinearLayoutManager manager = new LinearLayoutManager(this);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
+        mServiceIntent = new Intent(this, StockIntentService.class);
         getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
-
         refreshLayout.setNestedScrollingEnabled(true);
         mCursorAdapter = new QuoteCursorAdapter(this, null);
         recyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(this,
@@ -125,31 +119,31 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                     }
                 }));
         recyclerView.setAdapter(mCursorAdapter);
+
+
         recyclerView.setOnScrollChangeListener(new RecyclerView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                pos = manager.findLastCompletelyVisibleItemPosition();
                 if(manager.findFirstCompletelyVisibleItemPosition() == 0)
                     refreshLayout.setEnabled(true);
                 else
                     refreshLayout.setEnabled(false);
             }
         });
-        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
 
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                Log.d("Scroll",  dx + "," + dy);
-                if(manager.findFirstCompletelyVisibleItemPosition() == 0)
-                    refreshLayout.setEnabled(true);
-                else
-                    refreshLayout.setEnabled(false);
-                super.onScrolled(recyclerView, dx, dy);
+        if (savedInstanceState == null) {
+            // Run the initialize task service so that some stocks appear upon an empty database
+            mServiceIntent.putExtra("tag", "init");
+            if (Utils.isNetworkAvailable(MyStocksActivity.this)) {
+                startService(mServiceIntent);
+            } else {
+                networkToast();
             }
-        });
+        } else {
+            pos = savedInstanceState.getInt("Position");
+            recyclerView.smoothScrollToPosition(pos);
+        }
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -281,6 +275,11 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
         getMenuInflater().inflate(R.menu.my_stocks, menu);
         restoreActionBar();
         return true;
+    }
+
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        Log.d("PosSaved", ""+pos);
+        savedInstanceState.putInt("Position", pos);
     }
 
     @Override

@@ -66,7 +66,7 @@ public class StockWidgetDataProvider implements RemoteViewsService.RemoteViewsFa
             cursor.moveToPosition(position);
             view.setTextViewText(R.id.stock_symbol_w, cursor.getString(1));
             view.setTextViewText(R.id.bid_price_w, cursor.getString(2));
-            view.setTextViewText(R.id.change_w, cursor.getString(3) + ", " + cursor.getString(4));
+            view.setTextViewText(R.id.change_w, cursor.getString(4) + " (" + cursor.getString(3) + ")");
             view.setInt(R.id.change_w, "setBackgroundResource", cursor.getString(3).contains("-") ? R.drawable.percent_change_pill_red : R.drawable.percent_change_pill_green);
 
             final Intent fillInIntent = new Intent();

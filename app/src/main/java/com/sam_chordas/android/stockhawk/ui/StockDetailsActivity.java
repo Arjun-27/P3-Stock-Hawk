@@ -52,7 +52,15 @@ public class StockDetailsActivity extends AppCompatActivity {
     Calendar cal;
     ProgressWheel wheel;
     String stockName;
+    String result = null;
+    LineSet dataSet = null;
     boolean isLoading;
+
+    private static final int UI_THREAD_SYNC_DURATION = 1000;
+    private static final int GRAPH_ANIM_DURATION = 900;
+
+    private float avg_high;
+    private Paint paint;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,11 +74,22 @@ public class StockDetailsActivity extends AppCompatActivity {
         stockName = getIntent().getStringExtra("STOCK_NAME").toUpperCase(Locale.getDefault());
         setTitle(stockName);
 
-        new GetStockData().execute();
+        paint = new Paint();
+        paint.setColor(Color.parseColor("#33FFFFFF"));
+        avg_high = 0F;
 
         wheel.setVisibility(View.INVISIBLE);
         assert modes != null;
         //Default time mode
+        if(savedInstanceState == null) {
+            new GetStockData().execute();
+        } else {
+            if(savedInstanceState.getString("Result") != null)
+                setStockData(savedInstanceState.getString("Result"));
+            else
+                new GetStockData().execute();
+        }
+
         new GetGraphData().execute(-5, 1);
         toggleTextColors(R.id.btn_5D);
 
@@ -167,8 +186,8 @@ public class StockDetailsActivity extends AppCompatActivity {
             try {
                 Response response = client.newCall(new Request.Builder().url(BASE_URL + END_URL).build()).execute();
                 JSONObject obj = new JSONObject(response.body().string()).getJSONObject("query").getJSONObject("results").getJSONObject("quote");
-
-                return obj.getString("Bid") + "|" + obj.getString("Change_PercentChange") + "|" + obj.getString("Open") + "|" + obj.getString("DaysHigh") + "|" + obj.getString("DaysLow") + "|" + obj.getString("AverageDailyVolume") + "|" + obj.getString("MarketCapitalization");
+                result = obj.getString("Bid") + "|" + obj.getString("Change_PercentChange") + "|" + obj.getString("Open") + "|" + obj.getString("DaysHigh") + "|" + obj.getString("DaysLow") + "|" + obj.getString("AverageDailyVolume") + "|" + obj.getString("MarketCapitalization");
+                return result;
             } catch (IOException e) {
                 publishProgress(getString(R.string.server_not_found));
                 e.printStackTrace();
@@ -184,42 +203,91 @@ public class StockDetailsActivity extends AppCompatActivity {
         }
 
         public void onPostExecute(String result) {
-            if(result != null) {
-                String data[] = result.split("\\|");
-                ((TextView) findViewById(R.id.textBid)).setText(data[0].equals("null") ? "--" : data[0].format(Locale.getDefault(), getString(R.string.str_format), Double.parseDouble(data[0])));
-                String change = "--", mktCap;
-                if(data[1] != null) {
-                    String changeArr[] = data[1].replace("%", "").split(" \\- ");
-                    for (int i = 0; i < changeArr.length; i++)
-                        changeArr[i] = changeArr[i].format(Locale.getDefault(), getString(R.string.str_format) , Double.parseDouble(changeArr[i]));
-
-                    change = changeArr[0] + " (" + changeArr[1] + "%) ";
-                }
-                ((TextView) findViewById(R.id.textChange)).setText(data[1] == (null) ? "--" : change);
-                ((TextView) findViewById(R.id.textChange)).setTextColor(data[1].contains("-") ? Color.RED : Color.GREEN);
-                ((TextView) findViewById(R.id.textOpen)).setText(data[2] == (null) ? "--" : String.format(Locale.getDefault(), getString(R.string.str_format), Double.parseDouble(data[2])));
-                ((TextView) findViewById(R.id.textHigh)).setText(data[3] == (null) ? "--" : String.format(Locale.getDefault(), getString(R.string.str_format), Double.parseDouble(data[3])));
-                ((TextView) findViewById(R.id.textLow)).setText(data[4] == (null) ? "--" : String.format(Locale.getDefault(), getString(R.string.str_format), Double.parseDouble(data[4])));
-                ((TextView) findViewById(R.id.textAvgVol)).setText(String.format(Locale.getDefault(), getString(R.string.str_format)  + " " + getString(R.string.str_M), Double.parseDouble(data[5])/1000000.00));
-                if(data[6].charAt(data[6].length() - 1) == 'B')
-                    mktCap = String.format(Locale.getDefault(), getString(R.string.str_format), Double.parseDouble(data[6].replace("B", ""))) + getString(R.string.str_B);
-                else
-                    mktCap = String.format(Locale.getDefault(), getString(R.string.str_format), Double.parseDouble(data[6].replace("M", ""))) + getString(R.string.str_M);
-                ((TextView) findViewById(R.id.textMktCap)).setText(data[6] == (null) ? "--" : mktCap);
-            }
+            setStockData(result);
         }
     }
 
-    private class GetGraphData extends AsyncTask<Integer, Void, LineSet> {
-        private static final int UI_THREAD_SYNC_DURATION = 1000;
-        private static final int GRAPH_ANIM_DURATION = 900;
+    private void setStockData(String result) {
+        if (result != null) {
+            String data[] = result.split("\\|");
+            ((TextView) findViewById(R.id.textBid)).setText(data[0].equals("null") ? "--" : data[0].format(Locale.getDefault(), getString(R.string.str_format), Double.parseDouble(data[0])));
+            String change = "--", mktCap;
+            if (data[1] != null) {
+                String changeArr[] = data[1].replace("%", "").split(" \\- ");
+                for (int i = 0; i < changeArr.length; i++)
+                    changeArr[i] = changeArr[i].format(Locale.getDefault(), getString(R.string.str_format), Double.parseDouble(changeArr[i]));
 
+                change = changeArr[0] + " (" + changeArr[1] + "%) ";
+            }
+            ((TextView) findViewById(R.id.textChange)).setText(data[1] == (null) ? "--" : change);
+            ((TextView) findViewById(R.id.textChange)).setTextColor(data[1].contains("-") ? Color.RED : Color.GREEN);
+            ((TextView) findViewById(R.id.textOpen)).setText(data[2] == (null) ? "--" : String.format(Locale.getDefault(), getString(R.string.str_format), Double.parseDouble(data[2])));
+            ((TextView) findViewById(R.id.textHigh)).setText(data[3] == (null) ? "--" : String.format(Locale.getDefault(), getString(R.string.str_format), Double.parseDouble(data[3])));
+            ((TextView) findViewById(R.id.textLow)).setText(data[4] == (null) ? "--" : String.format(Locale.getDefault(), getString(R.string.str_format), Double.parseDouble(data[4])));
+            ((TextView) findViewById(R.id.textAvgVol)).setText(String.format(Locale.getDefault(), getString(R.string.str_format) + " " + getString(R.string.str_M), Double.parseDouble(data[5]) / 1000000.00));
+            if (data[6].charAt(data[6].length() - 1) == 'B')
+                mktCap = String.format(Locale.getDefault(), getString(R.string.str_format), Double.parseDouble(data[6].replace("B", ""))) + getString(R.string.str_B);
+            else
+                mktCap = String.format(Locale.getDefault(), getString(R.string.str_format), Double.parseDouble(data[6].replace("M", ""))) + getString(R.string.str_M);
+            ((TextView) findViewById(R.id.textMktCap)).setText(data[6] == (null) ? "--" : mktCap);
+        }
+    }
+
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putString("Result", result);
+    }
+
+    private void setGraphData(final LineSet dataSet) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (dataSet != null) {
+                    chartView.addData(dataSet);
+
+                    int step = ((int) (2 * avg_high) + ((int) (2 * avg_high) % 5)) / 5;
+//                  Log.d("STEP", (step*5)+", "+step);
+
+                    chartView.setYLabels(AxisController.LabelPosition.NONE)
+                            .setLabelsColor(Color.parseColor("#99FFFFFF"))
+                            .setXAxis(false)
+                            .setYAxis(false)
+                            .setGrid(ChartView.GridType.FULL, paint)
+                            .setAxisBorderValues(0, step * 5, step)
+                            .setYLabels(AxisController.LabelPosition.OUTSIDE);
+
+                    final Animation animation = new Animation();
+                    animation.setDuration((int)(GRAPH_ANIM_DURATION/1.3));
+                    //animation.setStartPoint(0.5f, 0f);
+                    //animation.setEasing(new ExpoEase());
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            chartView.show(animation);
+                        }
+                    }, GRAPH_ANIM_DURATION / 3);
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            isLoading = false;
+                        }
+                    }, (long) (1.5 * UI_THREAD_SYNC_DURATION));
+
+                } else {
+                    Toast.makeText(StockDetailsActivity.this, R.string.graph_unavailable, Toast.LENGTH_LONG).show();
+                    isLoading = false;
+                }
+                wheel.startAnimation(AnimationUtils.loadAnimation(StockDetailsActivity.this, R.anim.zoom_out));
+            }
+        }, UI_THREAD_SYNC_DURATION);
+    }
+
+    private class GetGraphData extends AsyncTask<Integer, Void, LineSet> {
         private String BASE_URL = "https://query.yahooapis.com/v1/public/yql?q=";
         private String END_URL = "&format=json&diagnostics=false&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
 
         private OkHttpClient client;
-        private float avg_high;
-        private Paint paint;
 
         public void onPreExecute() {
             super.onPreExecute();
@@ -236,11 +304,8 @@ public class StockDetailsActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             client = new OkHttpClient();
-            paint = new Paint();
-            paint.setColor(Color.parseColor("#33FFFFFF"));
-            avg_high = 0F;
             if(chartView.getData().size() != 0) {
-                chartView.dismiss(new Animation().setDuration(GRAPH_ANIM_DURATION));
+                chartView.dismiss(new Animation().setDuration((int)(GRAPH_ANIM_DURATION/1.3)));
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -314,6 +379,7 @@ public class StockDetailsActivity extends AppCompatActivity {
                         //.setGradientFill(new int[]{Color.parseColor("#364d5a"), Color.parseColor("#3f7178")}, null)
                         .beginAt(0);
 
+                StockDetailsActivity.this.dataSet = dataSet;
                 return dataSet;
 
             } catch (IOException | JSONException | ParseException e) {
@@ -323,50 +389,7 @@ public class StockDetailsActivity extends AppCompatActivity {
         }
 
         public void onPostExecute(final LineSet dataSet) {
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (dataSet != null) {
-                        chartView.addData(dataSet);
-
-                        int step = ((int) (2 * avg_high) + ((int) (2 * avg_high) % 5)) / 5;
-//                  Log.d("STEP", (step*5)+", "+step);
-
-                        chartView.setYLabels(AxisController.LabelPosition.NONE)
-                                .setLabelsColor(Color.parseColor("#99FFFFFF"))
-                                .setXAxis(false)
-                                .setYAxis(false)
-                                .setGrid(ChartView.GridType.FULL, paint)
-                                .setAxisBorderValues(0, step * 5, step)
-                                .setYLabels(AxisController.LabelPosition.OUTSIDE);
-
-                        final Animation animation = new Animation();
-                        animation.setDuration(GRAPH_ANIM_DURATION);
-                        //animation.setStartPoint(0.5f, 0f);
-                        //animation.setEasing(new ExpoEase());
-
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                chartView.show(animation);
-                            }
-                        }, GRAPH_ANIM_DURATION / 3);
-
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                isLoading = false;
-                            }
-                        }, (long) (1.5 * UI_THREAD_SYNC_DURATION));
-
-                    } else {
-                        Toast.makeText(StockDetailsActivity.this, R.string.graph_unavailable, Toast.LENGTH_LONG).show();
-                        isLoading = false;
-                    }
-                    wheel.startAnimation(AnimationUtils.loadAnimation(StockDetailsActivity.this, R.anim.zoom_out));
-                }
-            }, UI_THREAD_SYNC_DURATION);
+            setGraphData(dataSet);
         }
 
         private String getDate(Calendar cal){
